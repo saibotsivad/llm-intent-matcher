@@ -8,7 +8,7 @@ Given some text, like from an email or SMS, use an LLM to determine what the mos
 
 Consider something like an email, or an SMS message.
 
-Then consider a list of action-like things, like this:
+Then consider a list of actions, like this:
 
 - Add to reading list
 - Alert me with a 2FA code
@@ -20,25 +20,27 @@ In this library, you define a key/value set of intents, where the key is the int
 const intents = {
 	'add to reading list': `
 		the email contains a long-form essay or blog post
-		type content, or appears to link out to one, and
-		does not appear to be primarily marketing
+		type content and does not appear to be marketing
 	`,
-	'physical item requiring delivery': `
+	'add to awaiting-delivery list': `
 		the email notes that a physical item was purchased
 		that will be shipped and delivered
 	`,
-	'physical item was delivered': `
+	'mark as delivered on awaiting-delivery list': `
 		the email notes that a physical item was delivered
 		to an address or other physical location
 	`,
 }
 ```
 
-You'll provide an LLM interface and the intents map, so imagine something like this:
+You'd provide an LLM interface and the intents map, so imagine something like this:
 
 ```js
-import { llm } from '@saibotsivad/TODO/chat-jippity'
 import { TODO } from '@saibotsivad/TODO'
+// NOTE TO SELF: don't have all the different LLM implementations in
+// this lib, maybe define types in this lib and make a couple example
+// libs that use those, but keep this lib slim
+import { llm } from '@saibotsivad/TODO-llm-chat-jippity'
 
 const intents = { /*... see above ...*/ }
 
