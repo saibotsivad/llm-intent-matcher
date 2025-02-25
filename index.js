@@ -1,26 +1,40 @@
-import chatJippity from './adapter/open-ai.js'
-import { createMatcher } from './lib/index.js'
+import levenshteinDistance from 'leven'
 
+const generateInitialPrompt = (intents) => `
+You are an email processing assistant who will be provided the body
+of an email and will need to find the most likely intent behind the
+email. Here are the possible intents:
+${Object.keys(intents).map(i => `- "${i}": ${intents[i]}`)}
+`
 
-const intents = {
-	'add to reading list': `
-		the email contains a long-form essay or blog post
-		type content, or appears to link out to one, and
-		does not appear to be primarily marketing
-	`,
-	'physical item requiring delivery': `
-		the email notes that a physical item was purchased
-		that will be shipped and delivered
-	`,
-	'physical item was delivered': `
-		the email notes that a physical item was delivered
-		to an address or other physical location
-	`,
+const generateQueryPrompt = (query) => `
+<email-message>
+${query}
+</email-message>
+`
+
+export const createIntentMatcher = ({ llm, intents }) => {
+	const intentKeys = Object.keys(intents)
+	const initialContext = {
+		role: 'system',
+		message: generateInitialPrompt(intents)
+	}
+	return async (query) => {
+		const response = await llm({
+			conversation: [
+				initialContext,
+				{
+					role: 'user',
+					message: generateQueryPrompt(query),
+				},
+			],
+		})
+		return intents[response]
+			? response
+			: intentKeys.sort((a, b) => {
+				if (!a) return 1
+				if (!b) return -1
+				return levenshteinDistance(response, a) - levenshteinDistance(response, b)
+			}).pop()
+	}
 }
-
-const inquire = createMatcher({
-	llm: chatJippity({
-		apiKey: process.env.OPENAI_API_KEY,
-	}),
-	intents,
-})

@@ -4,12 +4,13 @@
   "description": "Given some text, like from an email or SMS, use an LLM to determine what the most likely intent is.",
   "type": "module",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "types": "types.d.ts",
   "keywords": [
     "llm"
   ],
   "author": "saibotsivad",
-  "license": "VOL"
+  "license": "VOL",
+  "dependencies": {
+    "leven": "^4.0.0"
+  }
 }
