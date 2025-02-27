@@ -37,7 +37,7 @@ You'd provide an LLM interface and the intents map, so imagine something like th
 
 ```js
 import { createIntentMatcher } from 'llm-intent-matcher'
-import { llm } from 'llm-intent-matcher/llm/open-ai-compatible'
+import { llm } from 'llm-intent-matcher/llm/openai'
 
 const matcher = createIntentMatcher({
 	llm: llm({ apiKey }),
@@ -59,6 +59,23 @@ const key = await inquire(`
 	Quantity: 1
 `)
 console.log(key) // => "physical item requiring delivery"
+```
+
+## LLM Provider
+
+Currently this library only offers the following:
+
+```js
+import { llm } from 'llm-intent-matcher/llm/openai'
+```
+
+However, you can supply a URL to point to any OpenAI compatible API and it'll work fine. For example if you're running a local LLM you could do:
+
+```js
+const matcher = createIntentMatcher({
+	llm: llm({ apiKey, apiUrl: 'http://localhost:8080' }),
+	intents, // from earlier
+})
 ```
 
 ## License
