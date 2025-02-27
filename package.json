@@ -3,8 +3,12 @@
   "version": "0.0.0",
   "description": "Given some text, like from an email or SMS, use an LLM to determine what the most likely intent is.",
   "type": "module",
-  "main": "index.js",
+  "main": "src/index.js",
   "types": "types.d.ts",
+  "scripts": {
+    "test": "node src/*.test.js",
+    "demo": "source configuration.sh && tsm demo/index.ts"
+  },
   "keywords": [
     "llm"
   ],
@@ -12,5 +16,9 @@
   "license": "VOL",
   "dependencies": {
     "leven": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "tsm": "^2.3.0"
   }
 }

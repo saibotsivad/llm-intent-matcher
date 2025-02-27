@@ -1,15 +1,28 @@
+import { LlmCallable, LlmQuery } from '../types'
+
 const URL = 'https://api.openai.com/v1/chat/completions'
+
+export interface OpenAiConfigs {
+	/**
+	 * The API key needed to access the OpenAI service.
+	 */
+	apiKey: string;
+	/**
+	 * The OpenAI model, e.g. `gpt-4`.
+	 */
+	model?: string;
+	/**
+	 * The creativity ratio.
+	 */
+	temperature?: number;
+}
 
 /**
  * Create an interface with OpenAI, e.g. ChatGPT. You'll need
  * to provide credentials and so on, but
- * @param {string} apiKey - The API key needed to access the OpenAI service.
- * @param {string} [model] - The OpenAI model, e.g. "gpt-4".
- * @param {number} [temperature] - The creativity function.
- * @return LlmCallable - The callable function.
  */
-export const openAi = ({ apiKey, model, temperature }) => {
-	return async ({ conversation }) => {
+export const openAi = ({ apiKey, model, temperature }: OpenAiConfigs): LlmCallable => {
+	return async (query: LlmQuery): Promise<string> => {
 		const response = await fetch(URL, {
 			method: 'POST',
 			headers: {
@@ -19,12 +32,12 @@ export const openAi = ({ apiKey, model, temperature }) => {
 			body: JSON.stringify({
 				model: model || 'gpt-4o-mini',
 				temperature: temperature || 0.7,
-				messages: conversation.map(({ role, message }) => ({
+				messages: query.conversation.map(({ role, message }) => ({
 					role, content: message,
 				})),
 			}),
 		})
-		let data
+		let data: unknown
 		try {
 			data = await response.json()
 		} catch (error) {
@@ -33,6 +46,7 @@ export const openAi = ({ apiKey, model, temperature }) => {
 		if (!response.ok) {
 			console.error('Error loading response:', data)
 		}
+		// @ts-ignore
 		return data?.choices?.[0]?.message?.content
 	}
 }

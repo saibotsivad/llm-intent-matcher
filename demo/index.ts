@@ -1,5 +1,5 @@
-import { createIntentMatcher } from '../index.js'
-import { openAi } from './llm-open-ai.js'
+import { createIntentMatcher } from '../src/index.js'
+import {openAi, OpenAiConfigs} from './llm-open-ai.js'
 
 const intents = {
 	'add to reading list': `
@@ -17,11 +17,12 @@ const intents = {
 	`,
 }
 
+const openAiConfigs: OpenAiConfigs = {
+	apiKey: process.env.OPENAI_API_KEY || '',
+}
+
 const inquire = createIntentMatcher({
-	llm: openAi({
-		apiKey: process.env.OPENAI_API_KEY,
-		model: ''
-	}),
+	llm: openAi(openAiConfigs),
 	intents,
 })
 
