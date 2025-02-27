@@ -11,6 +11,12 @@ const generateQueryPrompt = (query) => `
 ${query}
 `
 
+/**
+ * Create an intent matcher thingy.
+ * @param llm
+ * @param intents
+ * @return {function(*): Promise<*>}
+ */
 export const createIntentMatcher = ({ llm, intents }) => {
 	const intentKeys = Object.keys(intents)
 	const initialContext = {

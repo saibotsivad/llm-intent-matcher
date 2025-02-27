@@ -36,17 +36,12 @@ const intents = {
 You'd provide an LLM interface and the intents map, so imagine something like this:
 
 ```js
-import { TODO } from '@saibotsivad/TODO'
-// NOTE TO SELF: don't have all the different LLM implementations in
-// this lib, maybe define types in this lib and make a couple example
-// libs that use those, but keep this lib slim
-import { llm } from '@saibotsivad/TODO-llm-chat-jippity'
+import { createIntentMatcher } from 'llm-intent-matcher'
+import { llm } from 'llm-intent-matcher/llm/open-ai-compatible'
 
-const intents = { /*... see above ...*/ }
-
-const inquire = TODO({
-	llm: llm({ apiKey, etc }),
-	intents,
+const matcher = createIntentMatcher({
+	llm: llm({ apiKey }),
+	intents, // from earlier
 })
 ```
 
@@ -65,3 +60,7 @@ const key = await inquire(`
 `)
 console.log(key) // => "physical item requiring delivery"
 ```
+
+## License
+
+Published and released under the [Very Open License](http://veryopenlicense.com).

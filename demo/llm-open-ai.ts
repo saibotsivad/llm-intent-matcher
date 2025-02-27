@@ -8,6 +8,12 @@ export interface OpenAiConfigs {
 	 */
 	apiKey: string;
 	/**
+	 * Override with a custom URL to point to an API with
+	 * an OpenAI-compatible interface.
+	 * @default "https://api.openai.com/v1/chat/completions"
+	 */
+	apiUrl?: string;
+	/**
 	 * The OpenAI model, e.g. `gpt-4`.
 	 */
 	model?: string;
@@ -18,12 +24,11 @@ export interface OpenAiConfigs {
 }
 
 /**
- * Create an interface with OpenAI, e.g. ChatGPT. You'll need
- * to provide credentials and so on, but
+ * Create an interface with OpenAI, e.g. ChatGPT.
  */
-export const openAi = ({ apiKey, model, temperature }: OpenAiConfigs): LlmCallable => {
+export const openAi = ({ apiKey, apiUrl, model, temperature }: OpenAiConfigs): LlmCallable => {
 	return async (query: LlmQuery): Promise<string> => {
-		const response = await fetch(URL, {
+		const response = await fetch(apiUrl || URL, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

@@ -5,6 +5,11 @@
   "type": "module",
   "main": "src/index.js",
   "types": "types.d.ts",
+  "exports": {
+    ".": "./src/index.js",
+    "./llm/openai": "./src/llm/openai.js",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "test": "node src/*.test.js",
     "demo": "source configuration.sh && tsm demo/index.ts"
