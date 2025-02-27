@@ -1,6 +1,6 @@
 {
   "name": "llm-intent-matcher",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Given some text, like from an email or SMS, use an LLM to determine what the most likely intent is.",
   "type": "module",
   "main": "src/index.js",
